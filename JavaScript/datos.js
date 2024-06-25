@@ -209,7 +209,9 @@ async function borrarDatos() {
             data.record.splice(0, data.record.length);
 
             guardarDatos(data);
+
             //Se agrega un pequeño retraso para asegurarnos de que se accedan a los datos ya modificados
+            
             setTimeout(() => {
                 cargarRegistros()
             }, 500);
