@@ -1,0 +1,276 @@
+async function crearRegistro() {
+    let confirmar = false;
+    let jugador = {};
+    let minutos = 0;
+    let segundos = 0;
+    try {
+        const apiUrl = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97'; // URL de JSONBin
+        const response = await fetch(apiUrl, {
+            headers: {
+                'X-Master-Key': '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O' // Tu clave X-Master-Key aquí
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+        }
+        const data = await response.json();
+
+        console.log(typeof (data.record));
+        console.log(data.record)
+        confirmar = confirm("¿Crear nuevo registro?");
+        if (confirmar) {
+            jugador.nombre = prompt("Ingresar nuevo nombre: ");
+            jugador.respuestasCorrectas = Number(prompt("Ingresar cantidad de respuestas correctas: "));
+            minutos = parseInt(prompt("Ingresar minutos: "));
+            segundos = parseFloat(prompt("Ingresar segundos: "));
+            segundos = Number(segundos.toFixed(3));
+            jugador.tiempo = minutos * 60000 + segundos * 1000;
+            jugador.posicion = 0;
+
+            data.record.push(jugador);
+            guardarDatos(data);
+
+            //Se agrega un pequeño retraso para asegurarnos de que se accedan a los datos ya modificados
+            setTimeout(() => {
+                cargarRegistros()
+            }, 500);
+        }
+    } catch (error) {
+        console.error('Error al cargar los datos:', error);
+    }
+
+}
+
+// Función para cargar datos del servidor
+
+async function cargarRegistros() {
+    try {
+        const apiUrl = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97'; // URL de JSONBin
+        const response = await fetch(apiUrl, {
+            headers: {
+                'X-Master-Key': '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O' // Tu clave X-Master-Key aquí
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+        }
+        const data = await response.json();
+
+        const datosPosicion = document.getElementById("datosPosicion");
+        const datosNombre = document.getElementById("datosNombre");
+        const datosCorrectas = document.getElementById("datosCorrectas");
+        const datosTiempo = document.getElementById("datosTiempo");
+
+        let mensajePosicion = "";
+        let mensajeNombre = "";
+        let mensajeCorrectas = "";
+        let mensajeTiempo = "";
+
+        data.record.forEach(element => {
+            mensajePosicion += `<div>${element.posicion}</div>`;
+            mensajeNombre += `<div>${element.nombre}</div>`;
+            mensajeCorrectas += `<div>${element.respuestasCorrectas}</div>`;
+            let minutos = Math.floor((element.tiempo / 60000));
+            let segundos = Math.floor((element.tiempo - minutos * 60000) / 1000);
+            let milisegundos = element.tiempo - minutos * 60000 - segundos * 1000;
+            minutos = minutos.toString().padStart(2, '0');
+            segundos = segundos.toString().padStart(2, '0');
+            milisegundos = milisegundos.toString().padStart(3, '0');
+            mensajeTiempo += `<div>${minutos}' ${segundos}.${milisegundos}"</div>`;
+        });
+
+        datosPosicion.innerHTML = mensajePosicion;
+        datosNombre.innerHTML = mensajeNombre;
+        datosCorrectas.innerHTML = mensajeCorrectas;
+        datosTiempo.innerHTML = mensajeTiempo;
+
+    } catch (error) {
+        console.error('Error al cargar los datos:', error);
+    }
+}
+
+// Función para guardar datos en el servidor
+
+async function guardarDatos(data) {
+    // Ordena los datos antes de guardarlos
+    data.record.sort((a, b) => {
+        if (b.respuestasCorrectas !== a.respuestasCorrectas) {
+            return b.respuestasCorrectas - a.respuestasCorrectas;
+        } else {
+            return a.tiempo - b.tiempo;
+        }
+    });
+
+    // Asigna el valor de la posición después de ordenar
+
+    data.record.forEach((item, index) => {
+        item.posicion = index + 1;
+    });
+    console.log(typeof (data.record));
+
+    try {
+        const API_URL = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97';
+        const API_KEY = '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O';
+        const response = await fetch(API_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': API_KEY
+            },
+            body: JSON.stringify(data.record)
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al guardar los datos en JSONBin: ' + response.statusText);
+        }
+
+        const result = await response.json();
+        console.log('Datos guardados correctamente en JSONBin:', result);
+    } catch (error) {
+        console.error('Error al guardar los datos:', error);
+    }
+}
+
+async function modificarRegistro() {
+    let confirmar = false;
+    let jugador = {};
+    let nombre = "";
+    let respuestasCorrectas = 0;
+    let tiempo = 0;
+    let minutos = 0;
+    let segundos = 0;
+    ID = prompt("Ingresar la posición del jugador:");
+    try {
+        const apiUrl = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97'; // URL de JSONBin
+        const response = await fetch(apiUrl, {
+            headers: {
+                'X-Master-Key': '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O' // Tu clave X-Master-Key aquí
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+        }
+        const data = await response.json();
+        jugador = data.record[ID - 1];
+
+        confirmar = confirm("¿modificar datos de " + jugador.nombre + " en posición " + jugador.posicion + "?");
+        if (confirmar) {
+            confirmar = false;
+            confirmar = confirm("¿modificar nombre de " + jugador.nombre + "?");
+            if (confirmar) {
+                nombre = prompt("Ingresar nuevo nombre: ");
+                data.record[ID - 1].nombre = nombre;
+            }
+            confirmar = false;
+            confirmar = confirm("¿modificar cantidad de correctas? el dato actual es " + jugador.respuestasCorrectas);
+            if (confirmar) {
+                respuestasCorrectas = prompt("Ingresar nueva cantidad de correctas: ");
+                data.record[ID - 1].respuestasCorrectas = respuestasCorrectas;
+            }
+            confirmar = false;
+            confirmar = confirm("¿modificar tiempo? el dato actual es " + jugador.tiempo + "ms");
+            if (confirmar) {
+                minutos = parseInt(prompt("Ingresar minutos: "));
+                segundos = parseFloat(prompt("Ingresar segundos: "));
+                segundos = Number(segundos.toFixed(3));
+                tiempo = minutos * 60000 + segundos * 1000;
+                data.record[ID - 1].tiempo = tiempo;
+            }
+
+            // console.log(data.record[ID - 1]);
+
+            guardarDatos(data);
+            //Se agrega un pequeño retraso para asegurarnos de que se accedan a los datos ya modificados
+            setTimeout(() => {
+                cargarRegistros()
+            }, 500);
+        }
+    } catch (error) {
+        console.error('Error al cargar los datos:', error);
+    }
+}
+
+async function borrarDatos() {
+    let confirmacion = false;
+    confirmacion = confirm("Se borrarán todos los datos, estás seguro?");
+    if (confirmacion) {
+        try {
+            const apiUrl = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97'; // URL de JSONBin
+            const response = await fetch(apiUrl, {
+                headers: {
+                    'X-Master-Key': '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O' // Tu clave X-Master-Key aquí
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Error al obtener los datos');
+            }
+            const data = await response.json();
+
+            data.record.splice(0, data.record.length);
+
+            guardarDatos(data);
+            //Se agrega un pequeño retraso para asegurarnos de que se accedan a los datos ya modificados
+            setTimeout(() => {
+                cargarRegistros()
+            }, 500);
+        } catch (error) {
+            console.error('Error al cargar los datos:', error);
+        }
+    }
+}
+
+
+async function actualizarRanking(jugador) {
+
+    //--- recupera los datos guardados en data.json
+
+    try {
+        const apiUrl = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97'; // URL de JSONBin
+        const response = await fetch(apiUrl, {
+            headers: {
+                'X-Master-Key': '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O' // Tu clave X-Master-Key aquí
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+        }
+        const data = await response.json();
+
+        data.record.push(jugador);
+        guardarDatos(data);
+    } catch (error) {
+        console.error('Error al cargar los datos:', error);
+    }
+}
+
+async function borrarRegistro() {
+    let confirmar = false;
+    let jugador = {};
+    let nombre = "";
+    let respuestasCorrectas = 0;
+    let tiempo = 0;
+    ID = prompt("Ingresar la posición del jugador: ");
+
+    try {
+        const apiUrl = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97'; // URL de JSONBin
+        const response = await fetch(apiUrl, {
+            headers: {
+                'X-Master-Key': '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O' // Tu clave X-Master-Key aquí
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+        }
+        const data = await response.json();
+        data.record[ID - 1];
+        confirmar = confirm("¿eliminar datos de " + data.record[ID - 1].nombre + " en posición " + data.record[ID - 1].posicion + "?")
+        if (confirmar) data.record.splice(ID - 1, 1);
+        guardarDatos(data);
+        //Se agrega un pequeño retraso para asegurarnos de que se accedan a los datos ya modificados
+        setTimeout(() => {
+            cargarRegistros()
+        }, 500);
+    } catch (error) {
+        console.error('Error al cargar los datos:', error);
+    }
+}
