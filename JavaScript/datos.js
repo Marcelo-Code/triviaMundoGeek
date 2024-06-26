@@ -254,7 +254,7 @@ async function actualizarRanking(jugador) {
         }
         const data = await response.json();
 
-        if((data.record.length == 1) && (data.record.nombre[0] == "...")){
+        if((data.record.length == 1) && (data.record[0].nombre === "...")){
             data.record[0].nombre = jugador.nombre;
             data.record[0].respuestasCorrectas = jugador.respuestasCorrectas;
             data.record[0].tiempo = jugador.tiempo;
