@@ -13,10 +13,10 @@ function validarIG(nombreJugador) {
 
 async function cargar() {
     try {
-        const apiUrl = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97';
+        const apiUrl = 'https://api.jsonbin.io/v3/b/667b265fad19ca34f87ebdc4';
         const response = await fetch(apiUrl, {
             headers: {
-                'X-Master-Key': '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O' // Tu clave X-Master-Key aquí
+                'X-Master-Key': '$2a$10$WT5AxshcjZm2aoyff10BreyngNCLn3nPRaP4KL07tdYZ0.Z.ZO3NK' // Tu clave X-Master-Key aquí
             }
         });
         if (!response.ok) {

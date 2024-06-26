@@ -4,10 +4,10 @@ async function crearRegistro() {
     let minutos = 0;
     let segundos = 0;
     try {
-        const apiUrl = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97'; // URL de JSONBin
+        const apiUrl = 'https://api.jsonbin.io/v3/b/667b265fad19ca34f87ebdc4';
         const response = await fetch(apiUrl, {
             headers: {
-                'X-Master-Key': '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O' // Tu clave X-Master-Key aquí
+                'X-Master-Key': '$2a$10$WT5AxshcjZm2aoyff10BreyngNCLn3nPRaP4KL07tdYZ0.Z.ZO3NK' // Tu clave X-Master-Key aquí
             }
         });
         if (!response.ok) {
@@ -15,8 +15,6 @@ async function crearRegistro() {
         }
         const data = await response.json();
 
-        console.log(typeof (data.record));
-        console.log(data.record)
         confirmar = confirm("¿Crear nuevo registro?");
         if (confirmar) {
             jugador.nombre = prompt("Ingresar nuevo nombre: ");
@@ -27,10 +25,20 @@ async function crearRegistro() {
             jugador.tiempo = minutos * 60000 + segundos * 1000;
             jugador.posicion = 0;
 
-            data.record.push(jugador);
+            if((data.record.length == 1) && (data.record[0].nombre == "..."))
+                    {
+                        data.record[0].nombre = jugador.nombre;
+                        data.record[0].respuestasCorrectas = jugador.respuestasCorrectas;
+                        data.record[0].tiempo = jugador.tiempo;
+                    }
+            else data.record.push(jugador);
+
+            console.log(data.record);
+
             guardarDatos(data);
 
             //Se agrega un pequeño retraso para asegurarnos de que se accedan a los datos ya modificados
+            
             setTimeout(() => {
                 cargarRegistros()
             }, 500);
@@ -45,16 +53,18 @@ async function crearRegistro() {
 
 async function cargarRegistros() {
     try {
-        const apiUrl = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97'; // URL de JSONBin
+        const apiUrl = 'https://api.jsonbin.io/v3/b/667b265fad19ca34f87ebdc4';
         const response = await fetch(apiUrl, {
             headers: {
-                'X-Master-Key': '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O' // Tu clave X-Master-Key aquí
+                'X-Master-Key': '$2a$10$WT5AxshcjZm2aoyff10BreyngNCLn3nPRaP4KL07tdYZ0.Z.ZO3NK' // Tu clave X-Master-Key aquí
             }
         });
         if (!response.ok) {
             throw new Error('Error al obtener los datos');
         }
         const data = await response.json();
+
+        // console.log(data.record.length);
 
         const datosPosicion = document.getElementById("datosPosicion");
         const datosNombre = document.getElementById("datosNombre");
@@ -66,24 +76,26 @@ async function cargarRegistros() {
         let mensajeCorrectas = "";
         let mensajeTiempo = "";
 
-        data.record.forEach(element => {
-            mensajePosicion += `<div>${element.posicion}</div>`;
-            mensajeNombre += `<div>${element.nombre}</div>`;
-            mensajeCorrectas += `<div>${element.respuestasCorrectas}</div>`;
-            let minutos = Math.floor((element.tiempo / 60000));
-            let segundos = Math.floor((element.tiempo - minutos * 60000) / 1000);
-            let milisegundos = element.tiempo - minutos * 60000 - segundos * 1000;
-            minutos = minutos.toString().padStart(2, '0');
-            segundos = segundos.toString().padStart(2, '0');
-            milisegundos = milisegundos.toString().padStart(3, '0');
-            mensajeTiempo += `<div>${minutos}' ${segundos}.${milisegundos}"</div>`;
-        });
-
+        if((data.record.length == 1) && (data.record[0].nombre == "...")) alert("no hay registro de jugadores");
+        else
+            {
+                data.record.forEach(element => {
+                    mensajePosicion += `<div>${element.posicion}</div>`;
+                    mensajeNombre += `<div>${element.nombre}</div>`;
+                    mensajeCorrectas += `<div>${element.respuestasCorrectas}</div>`;
+                    let minutos = Math.floor((element.tiempo / 60000));
+                    let segundos = Math.floor((element.tiempo - minutos * 60000) / 1000);
+                    let milisegundos = element.tiempo - minutos * 60000 - segundos * 1000;
+                    minutos = minutos.toString().padStart(2, '0');
+                    segundos = segundos.toString().padStart(2, '0');
+                    milisegundos = milisegundos.toString().padStart(3, '0');
+                    mensajeTiempo += `<div>${minutos}' ${segundos}.${milisegundos}"</div>`;
+                });
+            }
         datosPosicion.innerHTML = mensajePosicion;
         datosNombre.innerHTML = mensajeNombre;
         datosCorrectas.innerHTML = mensajeCorrectas;
         datosTiempo.innerHTML = mensajeTiempo;
-
     } catch (error) {
         console.error('Error al cargar los datos:', error);
     }
@@ -92,9 +104,11 @@ async function cargarRegistros() {
 // Función para guardar datos en el servidor
 
 async function guardarDatos(data) {
+
     // Ordena los datos antes de guardarlos
+
     data.record.sort((a, b) => {
-        if (b.respuestasCorrectas !== a.respuestasCorrectas) {
+        if (b.respuestasCorrectas != a.respuestasCorrectas) {
             return b.respuestasCorrectas - a.respuestasCorrectas;
         } else {
             return a.tiempo - b.tiempo;
@@ -106,11 +120,11 @@ async function guardarDatos(data) {
     data.record.forEach((item, index) => {
         item.posicion = index + 1;
     });
-    console.log(typeof (data.record));
+    console.log(data.record);
 
     try {
-        const API_URL = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97';
-        const API_KEY = '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O';
+        const API_URL = 'https://api.jsonbin.io/v3/b/667b265fad19ca34f87ebdc4';
+        const API_KEY = '$2a$10$WT5AxshcjZm2aoyff10BreyngNCLn3nPRaP4KL07tdYZ0.Z.ZO3NK';
         const response = await fetch(API_URL, {
             method: 'PUT',
             headers: {
@@ -141,10 +155,10 @@ async function modificarRegistro() {
     let segundos = 0;
     ID = prompt("Ingresar la posición del jugador:");
     try {
-        const apiUrl = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97'; // URL de JSONBin
+        const apiUrl = 'https://api.jsonbin.io/v3/b/667b265fad19ca34f87ebdc4';
         const response = await fetch(apiUrl, {
             headers: {
-                'X-Master-Key': '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O' // Tu clave X-Master-Key aquí
+                'X-Master-Key': '$2a$10$WT5AxshcjZm2aoyff10BreyngNCLn3nPRaP4KL07tdYZ0.Z.ZO3NK' // Tu clave X-Master-Key aquí
             }
         });
         if (!response.ok) {
@@ -177,8 +191,6 @@ async function modificarRegistro() {
                 data.record[ID - 1].tiempo = tiempo;
             }
 
-            // console.log(data.record[ID - 1]);
-
             guardarDatos(data);
             //Se agrega un pequeño retraso para asegurarnos de que se accedan a los datos ya modificados
             setTimeout(() => {
@@ -195,10 +207,10 @@ async function borrarDatos() {
     confirmacion = confirm("Se borrarán todos los datos, estás seguro?");
     if (confirmacion) {
         try {
-            const apiUrl = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97'; // URL de JSONBin
+            const apiUrl = 'https://api.jsonbin.io/v3/b/667b265fad19ca34f87ebdc4';
             const response = await fetch(apiUrl, {
                 headers: {
-                    'X-Master-Key': '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O' // Tu clave X-Master-Key aquí
+                    'X-Master-Key': '$2a$10$WT5AxshcjZm2aoyff10BreyngNCLn3nPRaP4KL07tdYZ0.Z.ZO3NK' // Tu clave X-Master-Key aquí
                 }
             });
             if (!response.ok) {
@@ -206,12 +218,16 @@ async function borrarDatos() {
             }
             const data = await response.json();
 
-            data.record.splice(0, data.record.length);
+            if(data.record.length > 1) data.record.splice(0, data.record.length-1);
+            data.record[0].nombre = "...";
+            data.record[0].respuestasCorrectas = 0;
+            data.record[0].tiempo = 0;
+
+            console.log(data.record)
 
             guardarDatos(data);
 
             //Se agrega un pequeño retraso para asegurarnos de que se accedan a los datos ya modificados
-            
             setTimeout(() => {
                 cargarRegistros()
             }, 500);
@@ -227,10 +243,10 @@ async function actualizarRanking(jugador) {
     //--- recupera los datos guardados en data.json
 
     try {
-        const apiUrl = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97'; // URL de JSONBin
+        const apiUrl = 'https://api.jsonbin.io/v3/b/667b265fad19ca34f87ebdc4';
         const response = await fetch(apiUrl, {
             headers: {
-                'X-Master-Key': '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O' // Tu clave X-Master-Key aquí
+                'X-Master-Key': '$2a$10$WT5AxshcjZm2aoyff10BreyngNCLn3nPRaP4KL07tdYZ0.Z.ZO3NK' // Tu clave X-Master-Key aquí
             }
         });
         if (!response.ok) {
@@ -238,7 +254,13 @@ async function actualizarRanking(jugador) {
         }
         const data = await response.json();
 
-        data.record.push(jugador);
+        if(data.record.length == 1){
+            data.record[0].nombre = jugador.nombre;
+            data.record[0].respuestasCorrectas = jugador.respuestasCorrectas;
+            data.record[0].nombre = jugador.tiempo;
+        }
+        else data.record.push(jugador);
+
         guardarDatos(data);
     } catch (error) {
         console.error('Error al cargar los datos:', error);
@@ -254,10 +276,10 @@ async function borrarRegistro() {
     ID = prompt("Ingresar la posición del jugador: ");
 
     try {
-        const apiUrl = 'https://api.jsonbin.io/v3/b/6679cb32e41b4d34e4086f97'; // URL de JSONBin
+        const apiUrl = 'https://api.jsonbin.io/v3/b/667b265fad19ca34f87ebdc4';
         const response = await fetch(apiUrl, {
             headers: {
-                'X-Master-Key': '$2a$10$YQ1I8uMkOaOLz1VISWNW6.2RSfved5/2yvWqY0TQFtV0CuLEFJV4O' // Tu clave X-Master-Key aquí
+                'X-Master-Key': '$2a$10$WT5AxshcjZm2aoyff10BreyngNCLn3nPRaP4KL07tdYZ0.Z.ZO3NK' // Tu clave X-Master-Key aquí
             }
         });
         if (!response.ok) {
@@ -266,8 +288,16 @@ async function borrarRegistro() {
         const data = await response.json();
         data.record[ID - 1];
         confirmar = confirm("¿eliminar datos de " + data.record[ID - 1].nombre + " en posición " + data.record[ID - 1].posicion + "?")
-        if (confirmar) data.record.splice(ID - 1, 1);
+        if (confirmar){
+            if(data.record.length == 1){
+                data.record[0].nombre = "...";
+                data.record[0].respuestasCorrectas = 0;
+                data.record[0].tiempo = 0;
+            }
+            else data.record.splice(ID - 1, 1);
+        }
         guardarDatos(data);
+
         //Se agrega un pequeño retraso para asegurarnos de que se accedan a los datos ya modificados
         setTimeout(() => {
             cargarRegistros()
