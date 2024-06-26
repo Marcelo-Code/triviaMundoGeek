@@ -38,7 +38,7 @@ async function crearRegistro() {
             guardarDatos(data);
 
             //Se agrega un pequeño retraso para asegurarnos de que se accedan a los datos ya modificados
-            
+
             setTimeout(() => {
                 cargarRegistros()
             }, 500);
@@ -257,7 +257,7 @@ async function actualizarRanking(jugador) {
         if(data.record.length == 1){
             data.record[0].nombre = jugador.nombre;
             data.record[0].respuestasCorrectas = jugador.respuestasCorrectas;
-            data.record[0].nombre = jugador.tiempo;
+            data.record[0].tiempo = jugador.tiempo;
         }
         else data.record.push(jugador);
 
