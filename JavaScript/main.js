@@ -35,7 +35,7 @@ function generarOrdenPreguntas(cantidad) {
     }
     return arrayNumerosPreguntas;
 }
-arrayNumerosPreguntas = generarOrdenPreguntas(3);
+arrayNumerosPreguntas = generarOrdenPreguntas(15);
 function select_id(id) {
     return document.getElementById(id);
 }
