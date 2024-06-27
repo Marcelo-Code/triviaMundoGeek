@@ -4,7 +4,6 @@ const apiUrl = 'https://api.jsonbin.io/v3/b/667b265fad19ca34f87ebdc4';
 const apiKey = '$2a$10$WT5AxshcjZm2aoyff10BreyngNCLn3nPRaP4KL07tdYZ0.Z.ZO3NK';
 let dataJson = [];
 
-
 async function apiLeerRegistros() {
     try {
         const response = await fetch(apiUrl, {
@@ -16,14 +15,11 @@ async function apiLeerRegistros() {
             throw new Error('Error al obtener los datos');
         }
         const datos = await response.json();
-
         dataJson = datos;
-
     } catch (error) {
         console.error('Error al cargar los datos:', error);
     }
 }
-
 
 async function crearRegistro() {
     let confirmar = false;
@@ -59,8 +55,6 @@ async function crearRegistro() {
             cargarRegistros()
         }, 500);
     }
-
-
 }
 
 // Función para cargar datos del servidor
@@ -215,7 +209,6 @@ async function borrarDatos() {
     }
 }
 
-
 async function actualizarRanking(jugador) {
 
     //Recupera los datos guardados en dataJson.json
@@ -253,6 +246,7 @@ async function borrarRegistro() {
             dataJson.record[0].tiempo = 0;
         } else dataJson.record.splice(ID - 1, 1);
     }
+
     guardarDatos(dataJson);
 
     //Se agrega un pequeño retraso para asegurarnos de que se accedan a los datos ya modificados

@@ -1026,10 +1026,10 @@ const preguntas = [
         id: 100,
         categoria: "anime",
         pregunta: "¿Cuál es el nombre de la protagonista principal en Sailor Moon?",
-        respuesta: "Serena Tsukino",
-        incorrecta1: "Amy Mizuno",
+        respuesta: "Usagi Tsukino",
+        incorrecta1: "Ami Mizuno",
         incorrecta2: "Rei Hino",
-        incorrecta3: "Lita Kino",
+        incorrecta3: "Makoto Kino",
         imagen: "../images/sailorMoon.jpg"
     },
     {
@@ -1096,10 +1096,10 @@ const preguntas = [
         id: 107,
         categoria: "anime",
         pregunta: "¿Cuál es el verdadero nombre de Sailor Mars en Sailor Moon?",
-        respuesta: "Raye Hino",
-        incorrecta1: "Amy Mizuno",
-        incorrecta2: "Lita Kino",
-        incorrecta3: "Mina Aino",
+        respuesta: "Rei Hino",
+        incorrecta1: "Ami Mizuno",
+        incorrecta2: "Makoto Kino",
+        incorrecta3: "Minako Aino",
         imagen: "../images/sailorMoon.jpg"
     },
     {
@@ -1115,11 +1115,11 @@ const preguntas = [
     {
         id: 109,
         categoria: "anime",
-        pregunta: "¿Cuál es el nombre de la Sailor Moon que tiene pelo rosa?",
-        respuesta: "Sailor Chibi moon",
-        incorrecta1: "Sailor Marte",
-        incorrecta2: "Sailor Júpiter",
-        incorrecta3: "Sailor Venus",
+        pregunta: "¿Cuál es el nombre del novio de Makoto Kino en Sailor Moon?",
+        respuesta: "Motoki Furuhata",
+        incorrecta1: "Haruka Tenoh",
+        incorrecta2: "Seiya Kou",
+        incorrecta3: "Mamoru Chiba",
         imagen: "../images/sailorMoon.jpg"
     },
 
