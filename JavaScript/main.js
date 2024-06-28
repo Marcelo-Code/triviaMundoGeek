@@ -119,7 +119,6 @@ function oprimirBoton(i) {
                                     <div> Tiempo: ${minutos} ' ${segundos} . ${milisegundos} "</div=><br><br>
                                     <a class = "btnInicio" onclick = "cerrarVentana()">Salir</a>
                                 </div>
-                                <br>
                                 <div class = "mensajeFin"> ¡¡Recordá visitarnos en nuestro local!!</div>`;
 
             //Guardar los resutados en archivo:
