@@ -35,7 +35,7 @@ function generarOrdenPreguntas(cantidad) {
     }
     return arrayNumerosPreguntas;
 }
-arrayNumerosPreguntas = generarOrdenPreguntas(10);
+arrayNumerosPreguntas = generarOrdenPreguntas(1);
 function select_id(id) {
     return document.getElementById(id);
 }
@@ -106,14 +106,21 @@ function oprimirBoton(i) {
             const body = document.getElementById("body");
             const contenedor = document.getElementById("contenedor");
             body.removeChild(contenedor);
-            body.innerHTML = `<div class = "mensaje">¡¡Gracias por participar en la trivia!!<br>¡¡Recordá visitarnos en nuestro local!!</div>
-                                <div class = "cartel">
+            body.innerHTML = `<div class = "mensaje">¡¡Gracias por participar en la trivia!!<br>
+                                                        Por último:<br>
+                                                        👉 Realizá una captura de pantalla a tu resultado,<br>
+                                                        👉 compartilo en historias y ya tenés un lugar asegurado en el ranking<br>
+                                                        ⚠ 📱💻 Si tenés la cuenta en privado, mandanos la captura por mp<br>
+                                </div>
+                                <div class = "cartelFin">
                                     <div> ${nombreJugador} estos son tus resultados:</div>
-                                    <div> Correctas: ${respuestasCorrectas}</divss>
+                                    <div> Correctas: ${respuestasCorrectas}</div>
                                     <div> Incorrectas: ${respuestasIncorrectas}</div>
                                     <div> Tiempo: ${minutos} ' ${segundos} . ${milisegundos} "</div=><br><br>
                                     <a class = "btnInicio" onclick = "cerrarVentana()">Salir</a>
-                                </div>`;
+                                </div>
+                                <br>
+                                <div class = "mensajeFin"> ¡¡Recordá visitarnos en nuestro local!!</div>`;
 
             //Guardar los resutados en archivo:
 
@@ -121,7 +128,7 @@ function oprimirBoton(i) {
             jugador.respuestasCorrectas = respuestasCorrectas;
             jugador.tiempo = difference;
 
-            actualizarRanking(jugador);
+            //actualizarRanking(jugador);
             
         } else {
 
