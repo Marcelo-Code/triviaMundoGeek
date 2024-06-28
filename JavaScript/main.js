@@ -35,7 +35,7 @@ function generarOrdenPreguntas(cantidad) {
     }
     return arrayNumerosPreguntas;
 }
-arrayNumerosPreguntas = generarOrdenPreguntas(1);
+arrayNumerosPreguntas = generarOrdenPreguntas(10);
 function select_id(id) {
     return document.getElementById(id);
 }
@@ -109,7 +109,7 @@ function oprimirBoton(i) {
             body.innerHTML = `<div class = "mensaje">¡¡Gracias por participar en la trivia!!<br>
                                                         Por último:<br>
                                                         👉 Realizá una captura de pantalla a tu resultado,<br>
-                                                        👉 compartilo en historias y ya tenés un lugar asegurado en el ranking<br>
+                                                        👉 compartilo en historias, etiquetanos y ya tenés un lugar asegurado en el ranking<br>
                                                         ⚠ 📱💻 Si tenés la cuenta en privado, mandanos la captura por mp<br>
                                 </div>
                                 <div class = "cartelFin">
@@ -127,7 +127,7 @@ function oprimirBoton(i) {
             jugador.respuestasCorrectas = respuestasCorrectas;
             jugador.tiempo = difference;
 
-            //actualizarRanking(jugador);
+            actualizarRanking(jugador);
             
         } else {
 

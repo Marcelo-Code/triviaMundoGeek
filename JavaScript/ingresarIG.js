@@ -38,7 +38,7 @@ async function tomarIG() {
     nombreJugador = nombreJugador.toLowerCase();
     if (validarIG(nombreJugador)) {
 
-        //await cargar();
+        await cargar();
 
         ranking.forEach(elemento => {
             if (elemento.nombre === nombreJugador) nombreJugadorepetido = true;
